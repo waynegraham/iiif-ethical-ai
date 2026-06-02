@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIIF as an Ethical Access Layer for AI - Final Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Readex+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --clir-red: #9E2335;
+            --cream-bg: #FAF9F6;
+            --dark-text: #222222;
+            --muted-text: #5A5A5A;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #E5E7EB;
+            display: grid;
+            gap: 40px;
+            grid-template-columns: 1fr;
+            padding: 40px 0;
+            place-items: center;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--cream-bg);
+            color: var(--dark-text);
+            font-family: 'Readex Pro', sans-serif;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-radius: 4px;
+        }
+
+        .slide-container::after {
+            content: "";
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 450px; height: 450px;
+            background: radial-gradient(circle at 100% 100%, var(--clir-red), transparent 75%);
+            opacity: 0.04;
+            z-index: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--clir-red);
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 3rem;
+        }
+
+        .slide-title {
+            font-size: 52px;
+            margin: 50px 60px 15px 60px;
+            border-bottom: 2px solid var(--clir-red);
+            padding-bottom: 10px;
+            width: fit-content;
+            z-index: 1;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            padding: 0 60px 50px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        p, li { font-size: 22px; line-height: 1.6; color: var(--dark-text); font-weight: 300; }
+        strong { font-weight: 600; }
+
+        /* Title Screen */
+        .title-layout {
+            text-align: center;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(135deg, var(--clir-red) 0%, #7d1b2a 100%);
+            color: var(--white);
+            padding: 80px;
+        }
+
+        .title-layout h1 { font-size: 76px; color: var(--white); margin-bottom: 40px; font-weight: 700; line-height: 1.1; }
+        .title-layout p.subtitle { font-size: 28px; color: rgba(255,255,255,0.9); font-weight: 300; margin-bottom: 10rem; letter-spacing: 2px; }
+        .hosts-box { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-style: italic; opacity: 0.95; margin-bottom: 10px; }
+
+        /* Grid Architectures */
+        .two-column.tiled { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .tiled div { background: var(--white); padding: 40px; border-top: 4px solid var(--clir-red); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-radius: 4px; }
+        .tiled h3 { font-size: 32px; margin-bottom: 15px; }
+
+        .three-column-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; width: 100%; }
+        .room-card { background: var(--white); border-top: 4px solid var(--clir-red); padding: 30px 20px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .room-card h3 { font-size: 28px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .room-card ul { list-style: none; }
+        .room-card li { font-size: 16px; margin-bottom: 8px; color: var(--muted-text); line-height: 1.4; }
+
+        .image-wrapper { width: 100%; height: 400px; overflow: hidden; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .two-column.img-right { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+
+        .bullet-list ul { list-style: none; }
+        .bullet-list li { margin-bottom: 30px; padding-left: 60px; position: relative; font-size: 24px; }
+        .bullet-list i { position: absolute; left: 10px; top: 4px; color: var(--clir-red); font-size: 26px; }
+
+        .tiled-content { display: flex; gap: 20px; width: 100%; }
+        .tile { flex: 1; background: var(--white); padding: 30px 20px; text-align: center; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
+        .tile h3 { font-size: 26px; margin-bottom: 10px; }
+        .tile .icon { font-size: 36px; color: var(--clir-red); margin-bottom: 15px; }
+
+        .highlight-numbers-layout { display: flex; align-items: center; gap: 80px; }
+        .highlight-numbers-layout .number { font-size: 160px; font-weight: 700; color: var(--clir-red); font-family: 'Cormorant Garamond', serif; line-height: 1; }
+
+        .bleed-image-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; padding: 0; }
+        .bleed-image-layout .content-container { padding: 100px 60px; }
+        .bleed-image-layout img.bleed-image-side { height: 720px; width: 100%; object-fit: cover; }
+
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        th { background-color: var(--clir-red); color: white; padding: 22px; text-align: left; font-size: 24px; font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+        td { padding: 22px; border-bottom: 1px solid #EAEAEA; font-size: 18px; }
+
+        .timeline-layout { display: flex; justify-content: space-between; position: relative; padding: 40px 0; }
+        .timeline-line { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(158, 35, 53, 0.3); z-index: 0; }
+        .timeline-item { z-index: 1; background: var(--white); padding: 25px 20px; width: 22%; text-align: center; border-top: 4px solid var(--clir-red); box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-radius: 4px; }
+        .timeline-item h3 { font-size: 28px; margin-bottom: 8px; }
+        .timeline-item p { font-size: 16px; }
+
+        .qa-layout { text-align: center; padding-top: 60px; }
+        .qa-layout h2 { font-size: 90px; margin-bottom: 15px; }
+
+        .local-tip { background: #fff; border-left: 4px solid var(--clir-red); padding: 20px; border-radius: 4px; margin-top: 30px; font-size: 18px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        
+        .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+        .hub-card { background: var(--white); border-left: 5px solid var(--clir-red); padding: 25px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .hub-card h3 { font-size: 28px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .hub-card p { font-size: 18px; color: var(--muted-text); }
+        .placeholder-url { display: block; margin-top: 10px; font-family: monospace; background: #f1f1f1; padding: 6px 12px; border-radius: 4px; color: var(--clir-red); width: fit-content; font-size: 16px; }
+
+        /* Perspective Cards Grid */
+        .four-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
+        .perspective-card { background: var(--white); padding: 25px 20px; border-top: 4px solid var(--clir-red); box-shadow: 0 4px 12px rgba(0,0,0,0.02); border-radius: 4px; }
+        .perspective-card h3 { font-size: 24px; margin-bottom: 10px; line-height: 1.2; }
+        .perspective-card .count { font-size: 42px; font-weight: 700; color: var(--clir-red); font-family: 'Cormorant Garamond', serif; margin-bottom: 5px; }
+        .perspective-card p { font-size: 15px; color: var(--muted-text); line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slide1">
+    <div class="title-layout">
+        <h1>IIIF as an Ethical Access Layer for AI</h1>
+        <p class="subtitle">A Birds of a Feather Session</p>
+        <div class="hosts-box">Wayne Graham & Fenella France</div>
+        <div style="margin-top: 40px; font-size: 20px; font-weight: 300; letter-spacing: 1.5px; opacity: 0.8;">
+            IIIF Annual Conference 2026 | Leiden, Netherlands
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Welcome & Objectives</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Defining the Layer</h3>
+                <p>Examining how IIIF serves as core infrastructure for automated reuse and ethical stewardship.</p>
+            </div>
+            <div>
+                <h3>The BoF Goal</h3>
+                <p>Move beyond "finished solutions" to identify shared challenges and community-led design principles.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Perspectives in the Room</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 25px;">You all represent an amazing distribution of perspectives, critical for diving into these discussions:</p>
+        <div class="four-grid">
+            <div class="perspective-card">
+                <div class="count">11</div>
+                <h3>Academia &amp; Universities</h3>
+                <p>Focused on structural analysis, computational humanities, model testing, and preservation of research context.</p>
+            </div>
+            <div class="perspective-card">
+                <div class="count">9</div>
+                <h3>Tech Partners &amp; Platforms</h3>
+                <p>Focused on downstream delivery pipelines, API constraints, parsing codebases, and programmatic scalability.</p>
+            </div>
+            <div class="perspective-card">
+                <div class="count">6</div>
+                <h3>National Libraries</h3>
+                <p>Focused on long-term systemic data stewardship, widescale crawling parameters, and national collection policies.</p>
+            </div>
+            <div class="perspective-card">
+                <div class="count">6</div>
+                <h3>Research Institutes &amp; GLAM</h3>
+                <p>Focused on narrative-driven curation, sensitive collections, local provenance, and community storytelling.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Who is in the Room?</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 25px;">We have <strong>32 registered experts</strong> from 31 unique organizations worldwide, bringing a powerful mix of curation, engineering, and infrastructure perspectives:</p>
+        <div class="three-column-grid">
+            <div class="room-card">
+                <h3><i class="fa-solid fa-building-columns"></i> National Libraries</h3>
+                <ul>
+                    <li>• KB, National Library of the Netherlands</li>
+                    <li>• National Library of Finland</li>
+                    <li>• National Library of Estonia</li>
+                    <li>• The British Library</li>
+                    <li>• Netwerk Digitaal Erfgoed</li>
+                </ul>
+            </div>
+            <div class="room-card">
+                <h3><i class="fa-solid fa-graduation-cap"></i> Research & Academia</h3>
+                <ul>
+                    <li>• Stanford, UCLA, Cambridge, Edinburgh</li>
+                    <li>• Leeds, Bologna, KU Leuven, Amsterdam</li>
+                    <li>• Getty Trust, Wellcome Collection</li>
+                    <li>• National Gallery of Art, NIOD, Huygens</li>
+                    <li>• Diriyah Biennale Foundation</li>
+                </ul>
+            </div>
+            <div class="room-card">
+                <h3><i class="fa-solid fa-laptop-code"></i> Ecosystem Partners</h3>
+                <ul>
+                    <li>• Digirati, 4Science, OCLC</li>
+                    <li>• FromThePage, Urbancodes, Metamem</li>
+                    <li>• The Luster Company, Bella Vista BV</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">IIIF: Beyond Delivery</h2>
+    <div class="content-area">
+        <div class="two-column img-right">
+            <div>
+                <p style="margin-bottom: 20px;">As cultural heritage institutions increasingly rely on automated tools for discovery and structural analysis, IIIF is transforming from a traditional image delivery layer into a foundational runtime infrastructure.</p>
+                <p>Decisions made at the presentation and collection layers dictate how heritage materials are programmatically digested, parsed, and surfaced by downstream AI systems.</p>
+            </div>
+            <div class="image-wrapper">
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/4503063992797077596" alt="Digital heritage concept">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">The CLIR Collaboration</h2>
+    <div class="content-area">
+        <div class="two-column" style="display: flex; align-items: center; gap: 60px;">
+            <div style="flex: 1; border-radius: 4px; overflow: hidden; width: 340px; height: 340px; border-bottom: 8px solid var(--clir-red); flex-shrink: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/12991631509701170115" alt="Archival scanning" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 2;">
+                <h3>Narrative-Based Resources</h3>
+                <p style="margin-bottom: 15px;">Early collaborative exploration focused on utilizing the <strong>IIIF Presentation API</strong> to synthesize composite, narrative-driven collections.</p>
+                <p>By blending deep-zoom images with synchronous audiovisual materials—including oral histories and local community storytelling—this infrastructure research intentionally forces questions regarding context preservation in machine learning environments.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Critical Design Questions</h2>
+    <div class="content-area">
+        <div class="bullet-list">
+            <ul>
+                <li><i class="fa-solid fa-shield-halved"></i> <strong>Manifest Manifestations:</strong> How do public manifest patterns signal data constraints or legal limits to crawlers?</li>
+                <li><i class="fa-solid fa-tags"></i> <strong>Contextual Integrity:</strong> In what ways can metadata structures structurally tie provenance to downstream LLMs?</li>
+                <li><i class="fa-solid fa-user-check"></i> <strong>Consent & Ethics:</strong> Can API endpoints protect non-consensual reuse of sensitive audio or oral narratives?</li>
+                <li><i class="fa-solid fa-gears"></i> <strong>Downstream Pipes:</strong> How do decisions affect direct pipelines like computer vision and speech-to-text?</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">The Session Mechanics</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                <h3>Orient</h3>
+                <p>15m: Framework setting and introduction.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
+                <h3>Pitch & Vote</h3>
+                <p>15m: Democratic topic ideation and stickies.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-mug-hot"></i></div>
+                <h3>Pause</h3>
+                <p>10m: Networking and board configuration break.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-comments"></i></div>
+                <h3>Discuss</h3>
+                <p>60m: Time-boxed, hyper-focused 8-minute cycles.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+                <h3>Harvest</h3>
+                <p>20m: Principles and consortium next steps.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide8">
+    <div class="content-area" style="text-align: center; justify-content: center;">
+        <h1 style="font-size: 85px; margin-bottom: 20px;">Phase 1: Topic Pitching</h1>
+        <p style="font-size: 28px; max-width: 900px; margin: 0 auto; font-weight: 300;">Use the paper sticky notes available on your tables. <br>Write down your core infrastructural frustrations, structural questions, or algorithmic anxieties regarding IIIF assets.</p>
+        <p style="margin-top: 15px; font-size: 22px; color: var(--muted-text); font-style: italic;">Rule: One distinct concept per individual note. Write clearly!</p>
+        <div style="margin-top: 40px; color: var(--clir-red); font-weight: 600; font-size: 28px; letter-spacing: 1px;"><i class="fa-solid fa-stopwatch"></i> 10:00 MINUTES</div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">Prioritizing the Agenda</h2>
+    <div class="content-area">
+        <div class="highlight-numbers-layout">
+            <div class="number">3</div> 
+            <div>
+                <h3>Three Votes per Participant</h3>
+                <p>Review the categorized blocks on the wall. Place up to three dots on the specific themes or unique questions you wish to bring to the floor first.</p>
+                <div class="local-tip">
+                    <i class="fa-solid fa-compass" style="color: var(--clir-red); font-size: 28px;"></i>
+                    <span><strong>Logistics Contingency:</strong> If sticky dot supplies are limited, we will gracefully implement an elegant tally-mark marker protocol directly on the physical board.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide10" style="background-color: #F3F1EC;">
+    <div class="content-area" style="text-align: center; justify-content: center;">
+        <h1 style="font-size: 75px; margin-bottom: 20px; color: var(--clir-red);"><i class="fa-solid fa-mug-hot"></i> Intermission & Tallying</h1>
+        <p style="font-size: 26px; max-width: 850px; margin: 0 auto; color: var(--dark-text); font-weight: 300;">Grab refreshments and connect with fellow practitioners. During this window, we are computing the vote distribution to establish our conversational timeline queue.</p>
+        <div style="margin-top: 45px; color: var(--dark-text); font-weight: 600; font-size: 32px; letter-spacing: 2px;">RESUMING IN 10:00</div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide11">
+    <h2 class="slide-title">The 8-Minute Engine</h2>
+    <div class="content-area">
+        <div class="timeline-layout">
+            <div class="timeline-line"></div>
+            <div class="timeline-item">
+                <h3>Select</h3>
+                <p>Pull Top Topic</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Discuss</h3>
+                <p>8-Minute Cap</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Evaluate</h3>
+                <p>Roman Consensus</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Proceed</h3>
+                <p>Cycle Next Card</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 50px; font-style: italic; color: var(--muted-text);">Roman Voting: <strong>Thumbs Up</strong> extends discussion by 4 minutes; <strong>Thumbs Down</strong> immediately transitions to the next item.</p>
+    </div>
+</div>
+
+<div class="slide-container bleed-image-layout" id="slide12">
+    <div class="content-container">
+        <h2 class="slide-title" style="margin: 0 0 20px 0; border: none; padding: 0;">Responsible Machine Reuse</h2>
+        <div class="bleed-text-side">
+            <p style="margin-bottom: 25px;">Our strategic purpose is uncovering practical patterns where the IIIF ecosystem can provide responsible guidance before processing models normalize extraction patterns.</p>
+            <p>We champion <strong>deliberative tension</strong> and collective insight over absolute answers.</p>
+        </div>
+    </div>
+    <div class="image-container">
+        <img class="bleed-image-side" src="http://googleusercontent.com/image_collection/image_retrieval/15617190015424187537" alt="Collaborative workshop">
+    </div>
+</div>
+
+<div class="slide-container" id="slide13">
+    <h2 class="slide-title">The Harvest: Concrete Targets</h2>
+    <div class="content-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ecosystem Domain</th>
+                    <th>Actionable Target Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Technical Specs</strong></td>
+                    <td>Identify and document specification recipes for structured machine-stewardship metadata.</td>
+                </tr>
+                <tr>
+                    <td><strong>Consortium Policy</strong></td>
+                    <td>Produce an official community briefing on ethical scraping mitigation frameworks.</td>
+                </tr>
+                <tr>
+                    <td><strong>Viewer UX Integration</strong></td>
+                    <td>Expose transparent, machine-readable stewardship status banners within viewer applications.</td>
+                </tr>
+                <tr>
+                    <td><strong>Special Interest Groups</strong></td>
+                    <td>Evaluate immediate interest in chartered IIIF Community / Technical working cohorts.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="slide-container" id="slide14">
+    <div class="content-area qa-layout">
+        <h2>Reflections & Ideas?</h2>
+        <p style="margin-bottom: 50px; font-size: 26px; font-weight: 300;">Thank you for helping shape the ethical future of digital heritage layers.</p>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 38px; color: var(--clir-red); font-weight: bold; margin-bottom: 5px;">
+            Wayne Graham & Fenella France
+        </div>
+        <div style="font-size: 18px; color: var(--muted-text); letter-spacing: 1px;">
+            #IIIF2026 | Council on Library and Information Resources
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide15">
+    <h2 class="slide-title">Resource Hub & Continued Collaboration</h2>
+    <div class="content-area">
+        <p style="margin-bottom: 10px;">Please scan or document these connection links to follow up with active projects and draft guidelines reviewed today:</p>
+        <div class="hub-grid">
+            <div class="hub-card">
+                <h3><i class="fa-solid fa-folder-open"></i> Session Live Notes & Documentation</h3>
+                <p>Access our live scribe document containing clustered sticky card ideas and recorded consensus points from today's discussion.</p>
+                <span class="placeholder-url">bit.ly/iiif-ai-ethics-notes</span>
+            </div>
+            <!-- 
+            <div class="hub-card">
+                <h3><i class="fa-solid fa-file-lines"></i> CLIR Presentation Projects</h3>
+                <p>Review the design mockups, current audio/visual implementations, and open source manifest drafts linked to the narrative-based framework.</p>
+                <span class="placeholder-url">clir.org/projects/iiif-narratives</span>
+            </div>
+            <div class="hub-card">
+                <h3><i class="fa-solid fa-comments"></i> IIIF Slack Community Channel</h3>
+                <p>Join the persistent conversation on the official consortium workspace. We will report findings back to the community via this channel.</p>
+                <span class="placeholder-url">#ai-ethics-stewardship</span>
+            </div> -->
+            <div class="hub-card">
+                <h3><i class="fa-solid fa-code"></i> Patterns &amp; Anti-patterns</h3>
+                <p>A draft of some thoughts on Patterns/Anti-patterns for cultural heritage.</p>
+                <span class="placeholder-url">bit.ly/ethical-ai-patterns</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

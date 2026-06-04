@@ -348,6 +348,51 @@ td {
     margin-bottom: 15px;
 }
 
+.qr-slide {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    align-items: center;
+    gap: 70px;
+}
+
+.qr-copy h3 {
+    font-size: 54px;
+    margin-bottom: 20px;
+}
+
+.qr-copy p {
+    max-width: 620px;
+    margin-bottom: 30px;
+    font-size: 26px;
+}
+
+.qr-link {
+    display: inline-block;
+    color: var(--clir-red);
+    font-family: monospace;
+    font-size: 26px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.qr-code-frame {
+    display: block;
+    width: 400px;
+    height: 400px;
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.qr-code-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 .local-tip {
     background: #fff;
     border-left: 4px solid var(--clir-red);
